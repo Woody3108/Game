@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>game 1</title>
+    <style>
+        canvas {
+            border: 1px black solid;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="id-canvas" width="400" height="300"></canvas>
+</body>
+<script>
+const log = console.log.bind(console)
+
+const imageFromPath = function (path) {
+    let img = new Image();
+    img.src = path;
+    return img
+}
+
+const Paddle = function () {
+    // paddle 64 * 16
+    let image = imageFromPath('paddle.png')
+    let o = {
+        image: image,
+        x: 150,
+        y: 250,
+        // 末尾记得加 逗号 （一致性：1-35）
+        speed: 15,
+    }
+    let paddle = o
+    o.moveLeft = function () {
+        paddle.x -= paddle.speed
+    }
+    o.moveRight = function () {
+        paddle.x += paddle.speed
+    }
+    o.collide = function (ball) {
+        if (ball.y + ball.image.height > o.y) {
+            if (ball.x > o.x && ball.x < o.x + o.image.width) {
+                log('相撞')
+                return true
+            }
+        }
+        return false
+    }
+    return o
+}
+
+const Ball = function () {
+    // ball 8 * 8
+    let image = imageFromPath('ball.png')
+    let o = {
+        image: image,
+        x: 100,
+        y: 100,
+        // 末尾记得加 逗号 （一致性：1-35）
+        speedX: 5,
+        speedY: 5,
+        fired: false,
+    }
+    o.fire = function () {
+        o.fired = true
+        log('ball fire')
+    }
+    o.move = function () {
+        if (o.fired) {
+            // log('ball move')
+            if (o.x < 0 || o.x > 400) {
+                o.speedX = -o.speedX
+            }
+            if (o.y < 0 || o.y > 300) {
+                o.speedY = -o.speedY
+            }
+            // ball move
+            o.x += o.speedX
+            o.y += o.speedY
+        }
+    }
+    return o
+}
+
+const WoodGame = function () {
+    let g = {
+        actions: {},
+        keydowns: {},
+    }
+
+    let canvas = document.querySelector('#id-canvas')
+    let context = canvas.getContext('2d')
+    g.canvas = canvas
+    g.context = context
+
+    // draw
+    g.drawImage = function (woodImage) {
+        g.context.drawImage(woodImage.image, woodImage.x, woodImage.y)
+    }
+
+    // events
+    window.addEventListener('keydown', function (event) {
+        g.keydowns[event.key] = true
+    })
+    window.addEventListener('keyup', function (event) {
+        g.keydowns[event.key] = false
+    })
+    // registerAction注册事件
+    g.registerAction = function(key, callback) {
+        g.actions[key] = callback
+    }
+
+    // timer
+    setInterval(function () {
+        // events
+        let actions = Object.keys(g.actions)
+        for (let i = 0; i < actions.length; i++) {
+            let key = actions[i]
+            if (g.keydowns[key]) {
+                // 如果按键被按下，调用注册的 action
+                g.actions[key]()
+            }
+        }
+        // update
+        g.update()
+        // clear
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        // draw
+        g.draw()
+    }, 1000/30)
+    return g
+}
+
+const __main = function () {
+    let game = WoodGame()
+    let paddle = Paddle()
+    let ball = Ball()
+
+    game.registerAction('a', function () {
+        paddle.moveLeft()
+    })
+    game.registerAction('d', function () {
+        paddle.moveRight()
+    })
+    game.registerAction('f', function () {
+        ball.fire()
+    })
+
+    game.update = function() {
+        ball.move()
+        // 判断相撞
+        if (paddle.collide(ball)) {
+            ball.speedY *= -1
+        }
+    }
+
+    game.draw = function() {
+        // draw
+        game.drawImage(paddle)
+        game.drawImage(ball)
+    }
+
+}
+
+__main()
+</script>
+</html>
