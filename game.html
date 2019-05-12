@@ -15,13 +15,13 @@
 <script>
 const log = console.log.bind(console)
 
-const imageFromPath = function (path) {
+const imageFromPath = function(path) {
     let img = new Image();
     img.src = path;
     return img
 }
 
-const Paddle = function () {
+const Paddle = function() {
     // paddle 64 * 16
     let image = imageFromPath('paddle.png')
     let o = {
@@ -32,13 +32,23 @@ const Paddle = function () {
         speed: 15,
     }
     let paddle = o
-    o.moveLeft = function () {
-        paddle.x -= paddle.speed
+    o.move = function(x) {
+        if (x < 0) {
+            x = 0
+        }
+        if (x > 400 - o.image.width) {
+            x = 400 - x.image.width
+        }
+        o.x = x
     }
-    o.moveRight = function () {
-        paddle.x += paddle.speed
+    o.moveLeft = function() {
+        o.move(paddle.x - paddle.speed)
     }
-    o.collide = function (ball) {
+    o.moveRight = function() {
+        o.move(paddle.x + paddle.speed)
+
+    }
+    o.collide = function(ball) {
         if (ball.y + ball.image.height > o.y) {
             if (ball.x > o.x && ball.x < o.x + o.image.width) {
                 log('相撞')
@@ -50,7 +60,7 @@ const Paddle = function () {
     return o
 }
 
-const Ball = function () {
+const Ball = function() {
     // ball 8 * 8
     let image = imageFromPath('ball.png')
     let o = {
@@ -80,10 +90,43 @@ const Ball = function () {
             o.y += o.speedY
         }
     }
+    o.fantan = function () {
+        o.speedY *= -1
+    }
     return o
 }
 
-const WoodGame = function () {
+const reactIntersects = function (a, b) {
+    let o = a
+    if (b.y > o.y && b.y < o.y + o.image.height) {
+        if (b.x > o.x && b.x < o.x + o.image.width) {
+            log('相撞')
+            return true
+        }
+    }
+    return false
+}
+const Block = function() {
+    // block
+    let image = imageFromPath('block.png')
+    let o = {
+        image: image,
+        x: 100,
+        y: 40,
+        w: 50,
+        h: 20,
+        alive: true,
+    }
+    o.kill = function() {
+        o.alive = false
+    }
+    o.collide = function(b) {
+        return o.alive && (reactIntersects(o, b) || reactIntersects(b, o))
+    }
+    return o
+}
+
+const WoodGame = function() {
     let g = {
         actions: {},
         keydowns: {},
@@ -95,7 +138,7 @@ const WoodGame = function () {
     g.context = context
 
     // draw
-    g.drawImage = function (woodImage) {
+    g.drawImage = function(woodImage) {
         g.context.drawImage(woodImage.image, woodImage.x, woodImage.y)
     }
 
@@ -112,7 +155,7 @@ const WoodGame = function () {
     }
 
     // timer
-    setInterval(function () {
+    setInterval(function() {
         // events
         let actions = Object.keys(g.actions)
         for (let i = 0; i < actions.length; i++) {
@@ -132,18 +175,29 @@ const WoodGame = function () {
     return g
 }
 
-const __main = function () {
+const __main = function() {
     let game = WoodGame()
     let paddle = Paddle()
     let ball = Ball()
+    let blocks = []
 
-    game.registerAction('a', function () {
+    for (let i = 0; i < 3; i++) {
+        let b = Block()
+        // 设置 block 坐标
+        b.x = i * 100
+        b.y = 50
+        blocks.push(b)
+    }
+
+
+
+    game.registerAction('a', function() {
         paddle.moveLeft()
     })
-    game.registerAction('d', function () {
+    game.registerAction('d', function() {
         paddle.moveRight()
     })
-    game.registerAction('f', function () {
+    game.registerAction('f', function() {
         ball.fire()
     })
 
@@ -151,7 +205,16 @@ const __main = function () {
         ball.move()
         // 判断相撞
         if (paddle.collide(ball)) {
-            ball.speedY *= -1
+            ball.fantan()
+        }
+        // 判断 ball 和 blocks 相撞
+        for (let i = 0; i < blocks.length; i++) {
+            let block = blocks[i]
+            if (block.collide(ball)) {
+                log('球block相撞')
+                block.kill()
+                ball.fantan()
+            }
         }
     }
 
@@ -159,6 +222,13 @@ const __main = function () {
         // draw
         game.drawImage(paddle)
         game.drawImage(ball)
+        // draw blocks
+        for (let i = 0; i < blocks.length; i++) {
+            let block = blocks[i]
+            if (block.alive) {
+                game.drawImage(block)
+            }
+        }
     }
 
 }
