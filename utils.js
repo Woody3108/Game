@@ -1,5 +1,9 @@
 const log = console.log.bind(console)
 
+const e = selector => document.querySelector(selector)
+// const log = function (s) {
+//     e('#id-text-log').value += '\n' + s
+// }
 const imageFromPath = function(path) {
     let img = new Image();
     img.src = path;

@@ -1,13 +1,16 @@
-const Paddle = function() {
+const Paddle = function(game) {
     // paddle 64 * 16
-    let image = imageFromPath('paddle.png')
-    let o = {
-        image: image,
-        x: 150,
-        y: 250,
-        // 末尾记得加 逗号 （一致性：1-35）
-        speed: 15,
-    }
+    let o = game.imageByName('paddle')
+    // let o = {
+    //     image: image,
+    //     x: 150,
+    //     y: 250,
+    //     // 末尾记得加 逗号 （一致性：1-35）
+    //     speed: 15,
+    // }
+    o.x = 100
+    o.y = 250
+    o.speed = 15
     let paddle = o
     o.move = function(x) {
         if (x < 0) {
