@@ -3,6 +3,7 @@ const Woodgame = function(fps, images, runCallback) {
     // 程序会在所有图片载入成功后才运行
     // log('woodgame',images)
     let g = {
+        scene: null,
         actions: {},
         keydowns: {},
         images: {},
@@ -23,6 +24,14 @@ const Woodgame = function(fps, images, runCallback) {
     window.addEventListener('keyup', function (event) {
         g.keydowns[event.key] = false
     })
+    // update
+    g.update = function() {
+        g.scene.update()
+    }
+    // draw
+    g.draw = function() {
+        g.scene.draw()
+    }
     // registerAction注册事件
     g.registerAction = function(key, callback) {
         g.actions[key] = callback
@@ -30,7 +39,6 @@ const Woodgame = function(fps, images, runCallback) {
     // timer
     window.fps = 30
     var runloop = function() {
-        // log('---------------------')
         // log('window.fps----', window.fps)
         // events
         let actions = Object.keys(g.actions)
@@ -53,7 +61,7 @@ const Woodgame = function(fps, images, runCallback) {
         }, 1000/window.fps)
     }
 
-    var loads = []
+    let loads = []
     // 预先载入所有图片
     let names = Object.keys(images)
     for (var i = 0; i < names.length; i++) {
@@ -70,7 +78,7 @@ const Woodgame = function(fps, images, runCallback) {
             log('load images', loads.length, names.length)
             if (loads.length === names.length) {
                 log('load images---', g.images)
-                g.run()
+                g._start()
             }
         }
     }
@@ -84,12 +92,18 @@ const Woodgame = function(fps, images, runCallback) {
         }
         return image
     }
-    g.run = function() {
-        runCallback(g)
+    g.runWithScene = function(scene) {
+        g.scene = scene
         // 开始运行程序
         setTimeout(function(){
             runloop()
         }, 1000/fps)
+    }
+    g.replaceScene = function(scene) {
+        g.scene = scene
+    }
+    g._start = function(scene) {
+        runCallback(g)
     }
 
     return g
