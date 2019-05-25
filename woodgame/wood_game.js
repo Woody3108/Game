@@ -1,4 +1,4 @@
-const Woodgame = function(fps, images, runCallback) {
+const Wood_game = function(fps, images, runCallback) {
     // loads 是一个对象，里面是图片的引用名字和图片路径
     // 程序会在所有图片载入成功后才运行
     // log('woodgame',images)

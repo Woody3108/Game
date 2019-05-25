@@ -37,13 +37,14 @@ const enableDebugMode = function(game, enable) {
 const __main = function() {
 
     let images = {
-        ball: 'ball.png',
-        block: 'block.png',
-        paddle:'paddle.png',
+        ball: 'img/ball.png',
+        block: 'img/block.png',
+        paddle:'img/paddle.png',
     }
 
-    let game = Woodgame(30, images, function (g) {
-        let s = Scene(g)
+    let game = Wood_game(30, images, function (g) {
+        // let s = Scene(g)
+        let s = SceneTitle.new(g)
         g.runWithScene(s)
     })
 
