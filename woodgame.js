@@ -1,4 +1,4 @@
-const Woodgame = function(fps, images, runCallBack) {
+const Woodgame = function(fps, images, runCallback) {
     // loads 是一个对象，里面是图片的引用名字和图片路径
     // 程序会在所有图片载入成功后才运行
     // log('woodgame',images)
@@ -7,7 +7,6 @@ const Woodgame = function(fps, images, runCallBack) {
         keydowns: {},
         images: {},
     }
-
     let canvas = document.querySelector('#id-canvas')
     let context = canvas.getContext('2d')
     g.canvas = canvas
@@ -17,7 +16,6 @@ const Woodgame = function(fps, images, runCallBack) {
     g.drawImage = function(woodImage) {
         g.context.drawImage(woodImage.image, woodImage.x, woodImage.y)
     }
-
     // events
     window.addEventListener('keydown', function (event) {
         g.keydowns[event.key] = true
@@ -31,7 +29,9 @@ const Woodgame = function(fps, images, runCallBack) {
     }
     // timer
     window.fps = 30
-    const runloop = function() {
+    var runloop = function() {
+        // log('---------------------')
+        // log('window.fps----', window.fps)
         // events
         let actions = Object.keys(g.actions)
         for (let i = 0; i < actions.length; i++) {
@@ -53,12 +53,12 @@ const Woodgame = function(fps, images, runCallBack) {
         }, 1000/window.fps)
     }
 
-    let loads = []
+    var loads = []
     // 预先载入所有图片
     let names = Object.keys(images)
-    for (let i = 0; i < names.length; i++) {
-        let name = images[i]
-        let path = images[name]
+    for (var i = 0; i < names.length; i++) {
+        let name = names[i]
+        var path = images[name]
         let img = new Image()
         img.src = path
         img.onload = function () {
@@ -67,9 +67,9 @@ const Woodgame = function(fps, images, runCallBack) {
             // 所有图片都载入成功之后，调用 run
             loads.push(1)
             log('load images')
-            log(loads.length, names.length)
+            log('load images', loads.length, names.length)
             if (loads.length === names.length) {
-                log('load images')
+                log('load images---', g.images)
                 g.run()
             }
         }
@@ -85,12 +85,12 @@ const Woodgame = function(fps, images, runCallBack) {
         return image
     }
     g.run = function() {
-        runCallBack(g)
+        runCallback(g)
         // 开始运行程序
-        setTimeout(function() {
+        setTimeout(function(){
             runloop()
         }, 1000/fps)
-        return g
     }
 
+    return g
 }

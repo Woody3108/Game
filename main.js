@@ -85,7 +85,43 @@ const __main = function() {
             }
         }
 
+        // mouse event
+        let enableDrag = false
+        game.canvas.addEventListener('mousedown', function (event) {
+            let x = event.offsetX
+            let y = event.offsetY
+            log(x, y)
+            // 检查是否点中了 ball
+            if (ball.hasPoint(x, y)) {
+                // 设置拖拽
+                enableDrag = true
+            }
+        })
+
+        // mouse move
+        game.canvas.addEventListener('mousemove', function (event) {
+            let x = event.offsetX
+            let y = event.offsetY
+            // log(x, y, 'move')
+            if (enableDrag) {
+                log(x, y, 'drag')
+                ball.x = x
+                ball.y = y
+            }
+        })
+
+        // mouse up
+        game.canvas.addEventListener('mouseup', function (event) {
+            let x = event.offsetX
+            let y = event.offsetY
+            log(x, y, 'up')
+            enableDrag = false
+        })
+
         game.draw = function() {
+            // draw 背景
+            game.context.fillstyle = '#554'
+            game.context.fillRect(0, 0, 400, 300)
             // draw
             game.drawImage(paddle)
             game.drawImage(ball)
@@ -102,8 +138,6 @@ const __main = function() {
     })
 
     enableDebugMode(game, true)
-
-
 }
 
 __main()

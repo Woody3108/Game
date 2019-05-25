@@ -30,5 +30,11 @@ const Ball = function(game) {
     o.fantan = function () {
         o.speedY *= -1
     }
+
+    o.hasPoint = function (x, y) {
+        let xIn = x >= o.x && x <= o.x + o.w
+        let yIn = y >= o.y && y <= o.y + o.h
+        return xIn && yIn
+    }
     return o
 }
