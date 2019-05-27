@@ -42,8 +42,7 @@ const __main = function() {
         paddle:'img/paddle.png',
     }
 
-    let game = Wood_game(30, images, function (g) {
-        // let s = Scene(g)
+    let game = WoodGame.instance(30, images, function (g) {
         let s = SceneTitle.new(g)
         g.runWithScene(s)
     })

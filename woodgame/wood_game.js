@@ -1,46 +1,48 @@
-const Wood_game = function(fps, images, runCallback) {
-    // loads 是一个对象，里面是图片的引用名字和图片路径
-    // 程序会在所有图片载入成功后才运行
-    // log('woodgame',images)
-    let g = {
-        scene: null,
-        actions: {},
-        keydowns: {},
-        images: {},
+class WoodGame {
+    constructor(fps, images, runCallback) {
+        window.fps = fps
+        this.images = images
+        this.runCallback = runCallback
+        //
+        this.scene = null
+        this.actions = {}
+        this.keydowns = {}
+        this.canvas = document.querySelector('#id-canvas')
+        this.context = this.canvas.getContext('2d')
+        // events
+        let self = this
+        window.addEventListener('keydown',  (event) => {
+            this.keydowns[event.key] = true
+        })
+        window.addEventListener('keyup', function (event) {
+            self.keydowns[event.key] = false
+        })
+        this.init()
     }
-    let canvas = document.querySelector('#id-canvas')
-    let context = canvas.getContext('2d')
-    g.canvas = canvas
-    g.context = context
-
+    static instance(...args) {
+        this.i = this.i || new this(...args)
+        return this.i
+    }
     // draw
-    g.drawImage = function(woodImage) {
-        g.context.drawImage(woodImage.image, woodImage.x, woodImage.y)
+    drawImage(img) {
+        this.context.drawImage(img.image, img.x, img.y)
     }
-    // events
-    window.addEventListener('keydown', function (event) {
-        g.keydowns[event.key] = true
-    })
-    window.addEventListener('keyup', function (event) {
-        g.keydowns[event.key] = false
-    })
     // update
-    g.update = function() {
-        g.scene.update()
+    update() {
+        this.scene.update()
     }
     // draw
-    g.draw = function() {
-        g.scene.draw()
+    draw() {
+        this.scene.draw()
     }
     // registerAction注册事件
-    g.registerAction = function(key, callback) {
-        g.actions[key] = callback
+    registerAction(key, callback) {
+        this.actions[key] = callback
     }
-    // timer
-    window.fps = 30
-    var runloop = function() {
-        // log('window.fps----', window.fps)
+    runloop() {
+        log('window.fps----', window.fps)
         // events
+        let g = this
         let actions = Object.keys(g.actions)
         for (let i = 0; i < actions.length; i++) {
             let key = actions[i]
@@ -52,37 +54,40 @@ const Wood_game = function(fps, images, runCallback) {
         // update
         g.update()
         // clear
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        g.context.clearRect(0, 0, g.canvas.width, g.canvas.height);
         // draw
         g.draw()
         // next run loop
         setTimeout(function () {
-            runloop()
+            g.runloop()
         }, 1000/window.fps)
     }
-
-    let loads = []
-    // 预先载入所有图片
-    let names = Object.keys(images)
-    for (var i = 0; i < names.length; i++) {
-        let name = names[i]
-        var path = images[name]
-        let img = new Image()
-        img.src = path
-        img.onload = function () {
-            // 存入 g.images 中
-            g.images[name] = img
-            // 所有图片都载入成功之后，调用 run
-            loads.push(1)
-            log('load images')
-            log('load images', loads.length, names.length)
-            if (loads.length === names.length) {
-                log('load images---', g.images)
-                g._start()
+    init() {
+        let g = this
+        let loads = []
+        // 预先载入所有图片
+        let names = Object.keys(g.images)
+        for (let i = 0; i < names.length; i++) {
+            let name = names[i]
+            let path = g.images[name]
+            let img = new Image()
+            img.src = path
+            img.onload = function () {
+                // 存入 g.images 中
+                g.images[name] = img
+                // 所有图片都载入成功之后，调用 run
+                loads.push(1)
+                log('load images')
+                log('load images', loads.length, names.length)
+                if (loads.length === names.length) {
+                    log('load images---', g.images)
+                    g._start()
+                }
             }
         }
     }
-    g.imageByName = function(name) {
+    imageByName(name) {
+        let g = this
         log('image by name', g.images)
         let img = g.images[name]
         let image = {
@@ -92,19 +97,18 @@ const Wood_game = function(fps, images, runCallback) {
         }
         return image
     }
-    g.runWithScene = function(scene) {
+    runWithScene(scene) {
+        let g = this
         g.scene = scene
         // 开始运行程序
         setTimeout(function(){
-            runloop()
+            g.runloop()
         }, 1000/fps)
     }
-    g.replaceScene = function(scene) {
-        g.scene = scene
+    replaceScene(scene) {
+        this.scene = scene
     }
-    g._start = function(scene) {
-        runCallback(g)
+    _start(scene) {
+        this.runCallback(this)
     }
-
-    return g
 }
