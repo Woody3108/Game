@@ -25,7 +25,8 @@ class WoodGame {
     }
     // draw
     drawImage(img) {
-        this.context.drawImage(img.image, img.x, img.y)
+        // img 是一个 WoodImage
+        this.context.drawImage(img.texture, img.x, img.y)
     }
     // update
     update() {
@@ -40,7 +41,7 @@ class WoodGame {
         this.actions[key] = callback
     }
     runloop() {
-        log('window.fps----', window.fps)
+        // log('window.fps----', window.fps)
         // events
         let g = this
         let actions = Object.keys(g.actions)
@@ -86,16 +87,17 @@ class WoodGame {
             }
         }
     }
-    imageByName(name) {
+    textureByName(name) {
         let g = this
         log('image by name', g.images)
         let img = g.images[name]
-        let image = {
-            w: img.width,
-            h: img.height,
-            image: img,
-        }
-        return image
+        // let image = {
+        //     w: img.width,
+        //     h: img.height,
+        //     image: img,
+        // }
+        // return image
+        return img
     }
     runWithScene(scene) {
         let g = this

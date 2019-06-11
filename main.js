@@ -22,7 +22,7 @@ const enableDebugMode = function(game, enable) {
             window.pasued = !window.pasued
         } else if ('1234567'.includes(k)) {
             // 临时载入关卡功能
-            blocks = loadLevel(game, Number(k))
+            // blocks = loadLevel(game, Number(k))
         }
     })
     // 控制速度
@@ -37,13 +37,17 @@ const enableDebugMode = function(game, enable) {
 const __main = function() {
 
     let images = {
-        ball: 'img/ball.png',
-        block: 'img/block.png',
-        paddle:'img/paddle.png',
+        // ball: 'img/ball.png',
+        // block: 'img/block.png',
+        // paddle:'img/paddle.png',
+        bullet:'img/bullet.png',
+        cloud:'img/cloud.png',
+        player:'img/player.png',
+        sky:'img/sky.png',
     }
 
     let game = WoodGame.instance(30, images, function (g) {
-        let s = SceneTitle.new(g)
+        let s = Scene.new(g)
         g.runWithScene(s)
     })
 
