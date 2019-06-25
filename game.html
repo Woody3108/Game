@@ -26,12 +26,70 @@
     <script src="level.js"></script>
 </head>
 <body>
-    <canvas id="id-canvas" width="400" height="300"></canvas>
+    <canvas id="id-canvas" width="400" height="600"></canvas>
     <hr>
-    <input id="id-input-speed" type="range" value="1">
+    <!--<input id="id-input-speed" type="range" value="1">-->
     <div class="">
         <!--<textarea name="" id="id-text-log" cols="50" rows="20"></textarea>-->
     </div>
+    <div class="">
+        <label for="">
+            <input class="wood-auto-slider" type="range"
+                value=""
+                data-value="config.player_speed">
+            玩家速度：<span class="wood-label"></span>
+        </label>
+    </div>
+    <div class="">
+        <label for="">
+            <input class="wood-auto-slider" type="range"
+                   value=""
+                   max="10"
+                   data-value="config.fire_cooldown">
+            子弹冷却时间：<span class="wood-label"></span>
+        </label>
+    </div>
+    <div class="">
+        <label for="">
+            <input class="wood-auto-slider" type="range"
+                   value=""
+                   data-value="config.bullet_speed">
+            子弹速度：<span class="wood-label"></span>
+        </label>
+    </div>
+    <div class="">
+        <label for="">
+            <input class="wood-auto-slider" type="range"
+                   value=""
+                   min="-10"
+                   max="10"
+                   data-value="config.cloud_speed">
+            云速度：<span class="wood-label"></span>
+        </label>
+    </div>
     <script src="main.js"></script>
+    <script>
+        const es = sel => document.querySelectorAll(sel)
+
+        const bindAll = function (sel, eventName, callback) {
+            let l = es(sel)
+            for (let i = 0; i < l.length; i++) {
+                let input = l[i]
+                input.addEventListener(eventName, function (event) {
+                    callback(event)
+                })
+            }
+        }
+
+        bindAll('.wood-auto-slider', 'input', function (event) {
+            let target = event.target
+            let bindLet = target.dataset.value
+            let v = target.value
+            eval(bindLet + '=' + v)
+
+            let label = target.closest('label').querySelector('.wood-label')
+            label.innerText = v
+        })
+    </script>
 </body>
 </html>

@@ -26,12 +26,12 @@ const enableDebugMode = function(game, enable) {
         }
     })
     // 控制速度
-    document.querySelector('#id-input-speed').addEventListener('input', function () {
-        let input = event.target
-        log('控制速度', event)
-        log(input.value)
-        window.fps = Number(input.value)
-    })
+    // document.querySelector('#id-input-speed').addEventListener('input', function () {
+    //     let input = event.target
+    //     log('控制速度', event)
+    //     log(input.value)
+    //     window.fps = Number(input.value)
+    // })
 }
 
 const __main = function() {
@@ -43,6 +43,11 @@ const __main = function() {
         bullet:'img/bullet.png',
         cloud:'img/cloud.png',
         player:'img/player.png',
+        enemy0:'img/paddle.png',
+        enemy1:'img/paddle.png',
+        enemy2:'img/paddle.png',
+        enemy3:'img/paddle.png',
+        enemy4:'img/paddle.png',
         sky:'img/sky.png',
     }
 

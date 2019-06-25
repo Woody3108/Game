@@ -1,143 +1,164 @@
-class Scene extends WoodScene {
+const config = {
+    player_speed: 10,
+    cloud_speed: 1,
+    enemy_speed: 5,
+    bullet_speed: 5,
+    fire_cooldown: 9,
+}
+
+class Bullet extends WoodImage {
     constructor(game) {
-        super(game)
+        super(game, 'bullet')
         this.setup()
     }
     setup() {
-        let game = this.game
-        this.bg = WoodImage.new(game, 'sky')
-        // 暂时用一下飞机的图片替代云
-        this.cloud = WoodImage.new(game, 'cloud')
-        this.player = WoodImage.new(game, 'player')
-        // this.enemy = WoodImage.new(game, 'enemy')
-        this.player.x = 100
-        this.player.y = 150
-
-        // this.game.registerAction('a', function() {
-        //     this.moveLeft()
-        // })
-        // this.game.registerAction('d', function() {
-        //     this.moveRight()
-        // })
-        // this.game.registerAction('f', function() {
-        //     ball.fire()
-        // })
-
-        this.addElement(this.bg)
-        this.addElement(this.player)
-        this.addElement(this.cloud)
+        // 可以实现动态调整每一发子弹的速度
+        this.speed = config.bullet_speed
+        // this.speed = 2
     }
-    // draw() {
-    //     // draw labels
-    //     // this.game.drawImage(this.bg)
-    //     // this.game.drawImage(this.player)
-    // }
-
     update() {
-        this.cloud.y += 1
+        this.y -= this.speed
+    }
+}
+
+class Player extends WoodImage {
+    constructor(game) {
+        super(game, 'player')
+        this.setup()
+    }
+    setup() {
+        this.speed = 5
+        this.cooldown = 0
+    }
+    update() {
+        this.speed = config.player_speed
+        if (this.cooldown > 0) {
+            this.cooldown --
+        }
+    }
+    fire() {
+        if (this.cooldown === 0) {
+            this.cooldown = config.fire_cooldown
+        }
+        let x = this.x + this.w / 2
+        let y = this.y
+        let b = Bullet.new(this.game)
+        b.x = x
+        b.y = y
+        this.scene.addElement(b)
+    }
+    moveLeft() {
+        this.x -= this.speed
+    }
+    moveRight() {
+        this.x += this.speed
+    }
+    moveUp() {
+        this.y -= this.speed
+    }
+    moveDown() {
+        this.y += this.speed
     }
 }
 
 
-// let Scene = function (game) {
-//     let s = {
-//         game: game,
-//     }
-//     // 初始化
-//     let paddle = Paddle(game)
-//     let ball = Ball(game)
-//
-//     let score = 0
-//
-//     let blocks = loadLevel(game, 1)
-//
-//     game.registerAction('a', function() {
-//         paddle.moveLeft()
-//     })
-//     game.registerAction('d', function() {
-//         paddle.moveRight()
-//     })
-//     game.registerAction('f', function() {
-//         ball.fire()
-//     })
-//
-//     s.draw = function () {
-//         // draw 背景
-//         game.context.fillstyle = '#6e6e6e'
-//         game.context.fillRect(0, 0, 400, 300)
-//         // draw
-//         game.drawImage(paddle)
-//         game.drawImage(ball)
-//         // draw blocks
-//         for (let i = 0; i < blocks.length; i++) {
-//             let block = blocks[i]
-//             if (block.alive) {
-//                 game.drawImage(block)
-//             }
-//         }
-//         // draw labels
-//         game.context.fillText('分数：' + score, 10, 290)
-//     }
-//     s.update = function () {
-//         if (window.pasued) {
-//             return
-//         }
-//         ball.move()
-//         // 判断游戏结束
-//         if (ball.y > paddle.y) {
-//             // 跳转到 游戏结束 的场景
-//             let end = SceneEnd.new(game)
-//             game.replaceScene(end)
-//         }
-//         // 判断相撞
-//         if (paddle.collide(ball)) {
-//             // 调用一个 ball.反弹() 实现
-//             ball.fantan()
-//         }
-//         // 判断 ball 和 blocks 相撞
-//         for (let i = 0; i < blocks.length; i++) {
-//             let block = blocks[i]
-//             if (block.collide(ball)) {
-//                 log('球block相撞')
-//                 block.kill()
-//                 ball.fantan()
-//                 // 更新分数
-//                 score += 100
-//             }
-//         }
-//     }
-//
-//     // mouse event
-//     let enableDrag = false
-//     game.canvas.addEventListener('mousedown', function (event) {
-//         let x = event.offsetX
-//         let y = event.offsetY
-//         log(x, y)
-//         // 检查是否点中了 ball
-//         if (ball.hasPoint(x, y)) {
-//             // 设置拖拽
-//             enableDrag = true
-//         }
-//     })
-//
-//     // mouse move
-//     game.canvas.addEventListener('mousemove', function (event) {
-//         let x = event.offsetX
-//         let y = event.offsetY
-//         // log(x, y, 'move')
-//         if (enableDrag) {
-//             log(x, y, 'drag')
-//             ball.x = x
-//             ball.y = y
-//         }
-//     })
-//
-//     // mouse up
-//     game.canvas.addEventListener('mouseup', function (event) {
-//         let x = event.offsetX
-//         let y = event.offsetY
-//         log(x, y, 'up')
-//         enableDrag = false
-//     })
-//     return s
-// }
+
+class Enemy extends WoodImage {
+    constructor(game) {
+        let type = randomBetween(0, 4)
+        let name = 'enemy' + type
+        super(game, name)
+        this.setup()
+    }
+    setup() {
+        this.speed = randomBetween(2, 5)
+        this.x = randomBetween(0, 350)
+        this.y = -randomBetween(0, -50)
+    }
+    update() {
+        this.y += this.speed
+        if (this.y > 600) {
+            this.setup()
+        }
+    }
+}
+
+class Cloud extends WoodImage {
+    constructor(game) {
+        super(game, 'cloud')
+        this.setup()
+    }
+    setup() {
+        this.speed = 1
+        this.x = randomBetween(0, 350)
+        this.y = -randomBetween(0, -50)
+    }
+    update() {
+        this.speed = config.cloud_speed
+        this.y += this.speed
+        if (this.y > 600) {
+            this.setup()
+        }
+    }
+    // debug() {
+    //     // this.speed = config.cloud_speed
+    // }
+}
+
+class Scene extends WoodScene {
+    constructor(game) {
+        super(game)
+        this.setup()
+        this.setUpInputs()
+    }
+    setup() {
+        let game = this.game
+        this.numberOfEnemies = 5
+        this.bg = WoodImage.new(game, 'sky')
+        // 暂时用一下bilibili的图片替代云
+        this.cloud = Cloud.new(game, 'cloud')
+        // this.player = WoodImage.new(game, 'player')
+        // this.enemy = WoodImage.new(game, 'enemy')
+        this.player = Player.new(game)
+        this.player.x = 100
+        this.player.y = 150
+
+        this.addElement(this.bg)
+        this.addElement(this.cloud)
+        this.addElement(this.player)
+        this.addEnemies()
+    }
+
+    addEnemies() {
+        let es = []
+        for (let i = 0; i < this.numberOfEnemies; i++) {
+            let e = Enemy.new(this.game)
+            es.push(e)
+            this.addElement(e)
+        }
+        this.enemies = es
+    }
+    setUpInputs() {
+        let g = this.game
+        let s = this
+        g.registerAction('a', function() {
+            s.player.moveLeft()
+        })
+        g.registerAction('d', function() {
+            s.player.moveRight()
+        })
+        g.registerAction('w', function() {
+            s.player.moveUp()
+        })
+        g.registerAction('s', function() {
+            s.player.moveDown()
+        })
+        g.registerAction('j', function() {
+            s.player.fire()
+        })
+    }
+    update() {
+        super.update()
+        this.cloud.y += 1
+    }
+}
