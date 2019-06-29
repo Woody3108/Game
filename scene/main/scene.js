@@ -61,8 +61,6 @@ class Player extends WoodImage {
     }
 }
 
-
-
 class Enemy extends WoodImage {
     constructor(game) {
         let type = randomBetween(0, 4)
@@ -126,7 +124,13 @@ class Scene extends WoodScene {
         this.addElement(this.bg)
         this.addElement(this.cloud)
         this.addElement(this.player)
+
         this.addEnemies()
+
+        // add particles
+        let ps = WoodParticleSystem.new(this.game)
+        this.addElement(ps)
+
     }
 
     addEnemies() {

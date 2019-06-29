@@ -13,20 +13,11 @@ class WoodScene {
         this.elements.push(img)
     }
     draw() {
-        // alert('一定要继承本函数draw')
-        for (let i = 0; i < this.elements.length; i++) {
-            let e = this.elements[i]
-            this.game.drawImage(e)
+        for (let e of this.elements) {
+            e.draw()
         }
     }
     update() {
-        // if (this.debugModeEnabled) {
-        //     for (let i = 0; i < this.elements.length; i++) {
-        //         let e = this.elements[i]
-        //         // 如果有 debug 属性，就调用 debug 函数
-        //         e.debug && e.debug()
-        //     }
-        // }
         for (let i = 0; i < this.elements.length; i++) {
             let e = this.elements[i]
             e.update()

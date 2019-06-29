@@ -13,7 +13,8 @@ class WoodImage {
         return i
     }
     draw() {
-        alert('一定要继承本函数draw')
+        // alert('一定要继承本函数draw')
+        this.game.drawImage(this)
     }
     update() {
 

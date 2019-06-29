@@ -43,16 +43,18 @@ const __main = function() {
         bullet:'img/bullet.png',
         cloud:'img/cloud.png',
         player:'img/player.png',
-        enemy0:'img/paddle.png',
-        enemy1:'img/paddle.png',
-        enemy2:'img/paddle.png',
-        enemy3:'img/paddle.png',
-        enemy4:'img/paddle.png',
         sky:'img/sky.png',
+        enemy0:'img/enemy.png',
+        enemy1:'img/enemy.png',
+        enemy2:'img/enemy.png',
+        enemy3:'img/enemy.png',
+        enemy4:'img/enemy.png',
+        fire:'fire.png',
     }
 
     let game = WoodGame.instance(30, images, function (g) {
         let s = Scene.new(g)
+        // let s = SceneTitle.new(g)
         g.runWithScene(s)
     })
 
