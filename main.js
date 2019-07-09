@@ -66,33 +66,40 @@ const __main = function() {
 
         // 多状态动画
         // 跑动
-        run1: 'img/running/r1.png',
-        run2: 'img/running/r2.png',
-        run3: 'img/running/r3.png',
-        run4: 'img/running/r4.png',
-        run5: 'img/running/r5.png',
-        run6: 'img/running/r6.png',
-        run7: 'img/running/r7.png',
-        run8: 'img/running/r8.png',
-        run9: 'img/running/r9.png',
+        // run1: 'img/running/r1.png',
+        // run2: 'img/running/r2.png',
+        // run3: 'img/running/r3.png',
+        // run4: 'img/running/r4.png',
+        // run5: 'img/running/r5.png',
+        // run6: 'img/running/r6.png',
+        // run7: 'img/running/r7.png',
+        // run8: 'img/running/r8.png',
+        // run9: 'img/running/r9.png',
         // run10:'img/running/r10.png',
         // run11:'img/running/r11.png',
 
         // 滑倒
-        slide1: 'img/slide/s1.png',
-        slide2: 'img/slide/s2.png',
-        slide3: 'img/slide/s3.png',
-        slide4: 'img/slide/s4.png',
-        slide5: 'img/slide/s5.png',
-        slide6: 'img/slide/s6.png',
-        slide7: 'img/slide/s7.png',
-        slide8: 'img/slide/s8.png',
-        slide9: 'img/slide/s9.png',
+        // slide1: 'img/slide/s1.png',
+        // slide2: 'img/slide/s2.png',
+        // slide3: 'img/slide/s3.png',
+        // slide4: 'img/slide/s4.png',
+        // slide5: 'img/slide/s5.png',
+        // slide6: 'img/slide/s6.png',
+        // slide7: 'img/slide/s7.png',
+        // slide8: 'img/slide/s8.png',
+        // slide9: 'img/slide/s9.png',
         // slide10:'img/slide/s10.png',
         // slide11:'img/slide/s11.png',
 
         // 背景
-        cave: 'img/sky.png'
+        // cave: 'img/sky.png',
+
+        // flappy bird images
+        bg: 'img/background.png',
+        ground: 'img/ground.jpg',
+        b1: 'img/bird1.png',
+        b2: 'img/bird2.png',
+        b3: 'img/bird3.png',
     }
 
     let game = WoodGame.instance(30, images, function (g) {

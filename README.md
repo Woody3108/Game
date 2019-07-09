@@ -85,3 +85,12 @@ Game10【游戏中的动画】------>
     43：找动图素材（free game sprite）
         // https://www.gameart2d.com/freebies.html
     53-54：背景
+    
+Game11【flappy bird】------>
+    1-2：素材
+    3-11：循环移动地面
+    13-18：鸟（重力，加速度, 左右移动，jump）
+    19-24：jump抬头（旋转角度）
+    25-26：鸟的三个状态在同一张图片上，实现翅膀动（ctx.drawImage(...坐标)）
+    27-38：闲聊
+    39-41：消失效果globalAlpha
