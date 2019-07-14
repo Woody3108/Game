@@ -7,6 +7,9 @@ class WoodImage {
         log('this.texture', this.texture)
         this.w = this.texture.width
         this.h = this.texture.height
+
+        this.flipY = false
+        this.rotation = 0
     }
     static new(game, name) {
         let i = new this(game, name)
